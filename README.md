@@ -1,4 +1,10 @@
-# FlowQA
+# Baseline QA
+
+modifed from base project: [FlowQA](https://github.com/momohuang/FlowQA)
+
+
+
+### FlowQA
 
 This is our first attempt to make state-of-the-art single-turn QA models conversational.
 Feel free to build on top of our code to build an even stronger conversational QA model.
