@@ -32,8 +32,9 @@ parser.add_argument('--seed', type=int, default=1023,
                     help='random seed for data shuffling, embedding init, etc.')
 
 args = parser.parse_args()
-trn_file = 'QuAC_data/train.json'
-dev_file = 'QuAC_data/dev.json'
+base_path = '/home/david/PycharmProjects/FlowQA/'
+trn_file = base_path + 'QuAC_data/train.json'
+dev_file = base_path + 'QuAC_data/dev.json'
 wv_file = args.wv_file
 wv_dim = args.wv_dim
 nlp = spacy.load('en', disable=['parser'])
