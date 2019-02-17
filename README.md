@@ -24,6 +24,16 @@ download necessary files using:
 ./download.sh
 ```
 
+#### Step 2+:
+if there is a bug: 
+```shell
+OSError: [E050] Can't find model 'en'. It doesn't seem to be a shortcut link, a Python package or a valid path to a data directory
+```
+just run this command, will fix it:
+```shell
+python -m spacy download en
+```
+
 #### Step 3:
 preprocess the data files using:
 ```shell
