@@ -88,18 +88,19 @@ class QAModel(object):
 
         # Compute loss and accuracies
         loss = self.opt['elmo_lambda'] * (self.network.elmo.scalar_mix_0.scalar_parameters[0] ** 2
-                                        + self.network.elmo.scalar_mix_0.scalar_parameters[1] ** 2
-                                        + self.network.elmo.scalar_mix_0.scalar_parameters[2] ** 2) # ELMo L2 regularization
+                                          + self.network.elmo.scalar_mix_0.scalar_parameters[1] ** 2
+                                          + self.network.elmo.scalar_mix_0.scalar_parameters[
+                                              2] ** 2)  # ELMo L2 regularization
         all_no_span = (answer_c != 3)
-        answer_s.masked_fill_(all_no_span, -100) # ignore_index is -100 in F.cross_entropy
+        answer_s.masked_fill_(all_no_span, -100)  # ignore_index is -100 in F.cross_entropy
         answer_e.masked_fill_(all_no_span, -100)
-        rationale_s.masked_fill_(all_no_span, -100) # ignore_index is -100 in F.cross_entropy
+        rationale_s.masked_fill_(all_no_span, -100)  # ignore_index is -100 in F.cross_entropy
         rationale_e.masked_fill_(all_no_span, -100)
 
         for i in range(overall_mask.size(0)):
-            q_num = sum(overall_mask[i]) # the true question number for this sampled context
+            q_num = sum(overall_mask[i])  # the true question number for this sampled context
 
-            target_s = answer_s[i, :q_num] # Size: q_num
+            target_s = answer_s[i, :q_num]  # Size: q_num
             target_e = answer_e[i, :q_num]
             target_c = answer_c[i, :q_num]
             target_s_r = rationale_s[i, :q_num]
@@ -108,10 +109,11 @@ class QAModel(object):
 
             # single_loss is averaged across q_num
             single_loss = (F.cross_entropy(score_c[i, :q_num], target_c) * q_num.item() / 15.0
-                         + F.cross_entropy(score_s[i, :q_num], target_s) * (q_num - sum(target_no_span)).item() / 12.0
-                         + F.cross_entropy(score_e[i, :q_num], target_e) * (q_num - sum(target_no_span)).item() / 12.0)
-                         #+ self.opt['rationale_lambda'] * F.cross_entropy(score_s_r[i, :q_num], target_s_r) * (q_num - sum(target_no_span)).item() / 12.0
-                         #+ self.opt['rationale_lambda'] * F.cross_entropy(score_e_r[i, :q_num], target_e_r) * (q_num - sum(target_no_span)).item() / 12.0)
+                           + F.cross_entropy(score_s[i, :q_num], target_s) * (q_num - sum(target_no_span)).item() / 12.0
+                           + F.cross_entropy(score_e[i, :q_num], target_e) * (
+                                       q_num - sum(target_no_span)).item() / 12.0)
+            # + self.opt['rationale_lambda'] * F.cross_entropy(score_s_r[i, :q_num], target_s_r) * (q_num - sum(target_no_span)).item() / 12.0
+            # + self.opt['rationale_lambda'] * F.cross_entropy(score_e_r[i, :q_num], target_e_r) * (q_num - sum(target_no_span)).item() / 12.0)
 
             loss = loss + (single_loss / overall_mask.size(0))
         self.train_loss.update(loss.item(), overall_mask.size(0))
@@ -169,7 +171,7 @@ class QAModel(object):
 
         for i in range(overall_mask.size(0)):
             for j in range(overall_mask.size(1)):
-                if overall_mask[i, j] == 0: # this dialog has ended
+                if overall_mask[i, j] == 0:  # this dialog has ended
                     break
 
                 ans_type = np.argmax(score_c[i, j])
@@ -189,15 +191,15 @@ class QAModel(object):
                     s_offset, e_offset = spans[i][s_idx][0], spans[i][e_idx][1]
                     predictions.append(text[i][s_offset:e_offset])
 
-        return predictions # list of (list of strings)
+        return predictions  # list of (list of strings)
 
     # allow the evaluation embedding be larger than training embedding
     # this is helpful if we have pretrained word embeddings
-    def setup_eval_embed(self, eval_embed, padding_idx = 0):
+    def setup_eval_embed(self, eval_embed, padding_idx=0):
         # eval_embed should be a supermatrix of training embedding
         self.network.eval_embed = nn.Embedding(eval_embed.size(0),
                                                eval_embed.size(1),
-                                               padding_idx = padding_idx)
+                                               padding_idx=padding_idx)
         self.network.eval_embed.weight.data = eval_embed
         for p in self.network.eval_embed.parameters():
             p.requires_grad = False
@@ -243,7 +245,7 @@ class QAModel(object):
             'state_dict': {
                 'network': self.network.state_dict(),
                 'optimizer': self.optimizer.state_dict(),
-                'updates': self.updates # how many updates
+                'updates': self.updates  # how many updates
             },
             'config': self.opt,
             'epoch': epoch
@@ -252,7 +254,7 @@ class QAModel(object):
             torch.save(params, filename)
             logger.info('model saved to {}'.format(filename))
         except BaseException:
-            logger.warn('[ WARN: Saving failed... continuing anyway. ]')
+            logger.warning('[ WARN: Saving failed... continuing anyway. ]')
 
     def save_for_predict(self, filename, epoch):
         network_state = dict([(k, v) for k, v in self.network.state_dict().items() if k[0:4] != 'CoVe'])
@@ -268,7 +270,7 @@ class QAModel(object):
             torch.save(params, filename)
             logger.info('model saved to {}'.format(filename))
         except BaseException:
-            logger.warn('[ WARN: Saving failed... continuing anyway. ]')
+            logger.warning('[ WARN: Saving failed... continuing anyway. ]')
 
     def cuda(self):
         self.network.cuda()

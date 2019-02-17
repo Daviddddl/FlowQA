@@ -57,7 +57,7 @@ class StackedBRNN(nn.Module):
         self.rnns = nn.ModuleList()
         for i in range(num_layers):
             input_size = input_size if i == 0 else (2 * hidden_size + add_feat if i == 1 else 2 * hidden_size)
-            if self.dialog_flow == True:
+            if self.dialog_flow:
                 input_size += 2 * hidden_size
             self.rnns.append(rnn_type(input_size, hidden_size, num_layers=1, bidirectional=bidir))
 
@@ -77,7 +77,7 @@ class StackedBRNN(nn.Module):
             # Apply dropout to input
             if my_dropout_p > 0:
                 rnn_input = dropout(rnn_input, p=my_dropout_p, training=self.training)
-            if self.dialog_flow == True:
+            if self.dialog_flow:
                 if previous_hiddens is not None:
                     dialog_memory = previous_hiddens[i - 1].transpose(0, 1)
                 else:
@@ -117,7 +117,7 @@ def RNN_from_opt(input_size_, hidden_size_, opt, num_layers=-1, concat_rnn=None,
         dialog_flow=dialog_flow
     )
     output_size = 2 * hidden_size_
-    if (concat_rnn if concat_rnn is not None else opt['concat_rnn']):
+    if concat_rnn if concat_rnn is not None else opt['concat_rnn']:
         output_size *= num_layers if num_layers > 0 else opt['rnn_layers']
     return new_rnn, output_size
 
@@ -146,7 +146,7 @@ class MemoryLasagna_Time(nn.Module):
     def get_init(self, sample_tensor):
         global my_dropout_p
         self.dropout_mask = 1.0 / (1 - my_dropout_p) * torch.bernoulli((1 - my_dropout_p) * (
-                    sample_tensor.new_zeros(sample_tensor.size(0), sample_tensor.size(1), self.input_size) + 1))
+                sample_tensor.new_zeros(sample_tensor.size(0), sample_tensor.size(1), self.input_size) + 1))
 
         h = sample_tensor.new_zeros(sample_tensor.size(0), sample_tensor.size(1), self.hidden_size).float()
         memory = sample_tensor.new_zeros(sample_tensor.size(0) * sample_tensor.size(1), self.hidden_size).float()
