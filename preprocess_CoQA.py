@@ -32,8 +32,11 @@ parser.add_argument('--seed', type=int, default=1023,
                     help='random seed for data shuffling, embedding init, etc.')
 
 args = parser.parse_args()
-trn_file = 'CoQA/train.json'
-dev_file = 'CoQA/dev.json'
+perqa_path = 'data/coqa_format/'
+trn_file = perqa_path + 'perqa_train.json'
+dev_file = perqa_path + 'perqa_dev.json'
+# trn_file = 'CoQA/train.json'
+# dev_file = 'CoQA/dev.json'
 wv_file = args.wv_file
 wv_dim = args.wv_dim
 nlp = spacy.load('en', disable=['parser'])
