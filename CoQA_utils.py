@@ -28,8 +28,14 @@ def transform_2_coqa():
                             each_q_json = {'input_text': each_qa['q'], 'turn_id': each_qa['un']}
                             span_start = '\n'.join(each_ins['session']).find(each_qa['a'])
                             if span_start == -1:
-                                span_end = -1
-                                span_text = "unknown"
+                                span_start = 0
+                                sess_un = each_qa['un']
+                                for each_sess in each_ins['session']:
+                                    sess_un -= 1
+                                    if sess_un >= 0:
+                                        span_start += len(each_sess)
+                                span_end = span_start + each_ins['session'][each_qa['un'] - 1]
+                                span_text = each_qa['a']
                             else:
                                 span_end = span_start + len(each_qa['a'])
                                 span_text = each_qa['a']
@@ -44,18 +50,21 @@ def transform_2_coqa():
                             questions_list.append(each_q_json)
                             answers_list.append(each_a_json)
 
-                        each_data_json = {"source": "douban",
-                                          'id': each_data_json_id,
-                                          'filename': "null",
-                                          "story": '\n'.join(each_ins['session']),
-                                          "questions": questions_list,
-                                          "answers": answers_list,
-                                          "name": each_data_json_id}
+                        each_data_json = {
+                            "source": "douban",
+                            'id': each_data_json_id,
+                            'filename': "null",
+                            "story": '\n'.join(each_ins['session']),
+                            "questions": questions_list,
+                            "answers": answers_list,
+                            "name": each_data_json_id
+                        }
 
                         qa_json_data_list.append(each_data_json)
 
             qa_json['data'] = qa_json_data_list
             json.dump(qa_json, perqa_raw_qa_json_f, ensure_ascii=False)
+    raw_data_f.close()
 
 
 if __name__ == '__main__':
