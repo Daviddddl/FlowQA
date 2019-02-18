@@ -11,7 +11,7 @@ def tranformer_2_quac():
         with open('data/' + each_split + '_list.txt', 'r') as ids_f:
             ids_list.extend(ids_f.read().splitlines())
 
-        with open('data/quac_format/perqa_' + each_split + '.json', 'w+') as perqa_raw_qa_json_f:
+        with open('QuAC_data/' + each_split + '.json', 'w+') as perqa_raw_qa_json_f:
             qa_json_data_list = []
 
             for each_name in raw_data_json.keys():

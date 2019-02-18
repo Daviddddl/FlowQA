@@ -11,7 +11,7 @@ def transform_2_coqa():
             ids_list.extend(ids_f.read().splitlines())
 
         # print(each_split + str(len(ids_list)))
-        with open('data/coqa_format/perqa_' + each_split + '.json', 'w+') as perqa_raw_qa_json_f:
+        with open('CoQA/' + each_split + '.json', 'w+') as perqa_raw_qa_json_f:
             qa_json = {"version": "1.0"}
             qa_json_data_list = []
 
