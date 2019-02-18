@@ -11,7 +11,7 @@ def transform_2_coqa():
             ids_list.extend(ids_f.read().splitlines())
 
         # print(each_split + str(len(ids_list)))
-        with open('data/perqa_' + each_split + '.json', 'w+') as perqa_raw_qa_json_f:
+        with open('data/coqa_format/perqa_' + each_split + '.json', 'w+') as perqa_raw_qa_json_f:
             qa_json = {"version": "1.0"}
             qa_json_data_list = []
 
@@ -34,7 +34,7 @@ def transform_2_coqa():
                                     sess_un -= 1
                                     if sess_un >= 0:
                                         span_start += len(each_sess)
-                                span_end = span_start + each_ins['session'][each_qa['un'] - 1]
+                                span_end = span_start + len(each_ins['session'][each_qa['un'] - 1])
                                 span_text = each_qa['a']
                             else:
                                 span_end = span_start + len(each_qa['a'])
