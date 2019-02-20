@@ -234,7 +234,7 @@ def main():
         if args.save_best_only:
             if f1 > best_val_score:
                 best_val_score, best_na, best_thresh = f1, na, thresh
-                model_file = os.path.join(model_dir, 'best_model.pt')
+                model_file = os.path.join(model_dir, 'best_model_quac.pt')
                 model.save(model_file, epoch)
                 log.info('[new best model saved.]')
         else:
