@@ -33,6 +33,7 @@ class FlowQA(nn.Module):
                     for p in self.embedding.parameters():
                         p.requires_grad = False
                 else:
+                    # print(embedding.size(0))
                     assert opt['tune_partial'] < embedding.size(0)
                     fixed_embedding = embedding[opt['tune_partial']:]
                     # a persistent buffer for the nn.Module

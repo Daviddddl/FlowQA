@@ -67,14 +67,14 @@ def tranformer_2_quac():
 
 
 if __name__ == '__main__':
-    with open('data/quac_format/perqa_train.json', 'r') as f:
-        json_data = json.load(f)
+    # with open('data/quac_format/perqa_train.json', 'r') as f:
+    #     json_data = json.load(f)
 
     # print(json_data.keys())     # dict_keys(['data'])
     # level_1 = json.dumps(json_data['data'][0])
     # print(json.loads(level_1).keys())       # dict_keys(['title', 'paragraphs'])
-    print(json.dumps(json_data['data'][0], ensure_ascii=False))
+    # print(json.dumps(json_data['data'][0], ensure_ascii=False))
 
-    # tranformer_2_quac()
+    tranformer_2_quac()
 
 

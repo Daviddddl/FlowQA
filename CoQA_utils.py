@@ -50,15 +50,27 @@ def transform_2_coqa():
                             questions_list.append(each_q_json)
                             answers_list.append(each_a_json)
 
-                        each_data_json = {
-                            "source": "douban",
-                            'id': each_data_json_id,
-                            'filename': "null",
-                            "story": '\n'.join(each_ins['session']),
-                            "questions": questions_list,
-                            "answers": answers_list,
-                            "name": each_data_json_id
-                        }
+                        if each_split == 'train':
+                            each_data_json = {
+                                "source": "douban",
+                                'id': each_data_json_id,
+                                'filename': "null",
+                                "story": '\n'.join(each_ins['session']),
+                                "questions": questions_list,
+                                "answers": answers_list,
+                                "name": each_data_json_id
+                            }
+                        else:
+                            each_data_json = {
+                                "source": "douban",
+                                'id': each_data_json_id,
+                                'filename': "null",
+                                "story": '\n'.join(each_ins['session']),
+                                "questions": questions_list,
+                                "answers": answers_list,
+                                "additional_answers": {"0": answers_list},
+                                "name": each_data_json_id
+                            }
 
                         qa_json_data_list.append(each_data_json)
 
