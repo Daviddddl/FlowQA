@@ -1,16 +1,14 @@
-import re
-import json
-import spacy
-import msgpack
-import unicodedata
-import numpy as np
-import pandas as pd
 import argparse
 import collections
-import multiprocessing
 import logging
+import multiprocessing
 import random
-from allennlp.modules.elmo import batch_to_ids
+
+import msgpack
+import numpy as np
+import pandas as pd
+import spacy
+
 from general_utils import flatten_json, free_text_to_span, normalize_text, build_embedding, load_glove_vocab, pre_proc, \
     get_context_span, find_answer_span, feature_gen, token2id
 
